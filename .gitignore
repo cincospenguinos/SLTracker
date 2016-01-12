@@ -6,3 +6,8 @@ build
 .lock-waf*
 # build/ should never be included
 build/
+# Ignoring all emacs buffers
+*.c~
+*.h~
+\#*.*
+\.\#*.*
