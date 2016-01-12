@@ -21,8 +21,6 @@ void workout_window_init(){
     window_set_fullscreen(workout_window, true);
   #endif
 
-  window_set_background_color(workout_window, true);
-
   window_set_window_handlers(workout_window, (WindowHandlers){
       .load = workout_window_load,
       .unload = workout_window_unload

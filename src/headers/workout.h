@@ -25,3 +25,6 @@ Workout workout_create_today();
 
 /* Returns the name of the exercise requested given the workout provided */
 const char * get_exercise_name(Workout *, uint8_t);
+
+/* Returns a workout at the index requested. */
+Workout get_workout_at(int);
