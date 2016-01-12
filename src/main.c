@@ -7,8 +7,6 @@ void init(){
 
 void deinit(){
   workout_window_deinit();
-
-
 }
 
 int main(){

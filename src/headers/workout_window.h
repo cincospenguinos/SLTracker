@@ -1,12 +1,10 @@
 #pragma once
 #include <pebble.h>
 
-extern Window *workout_window;
-
 /* Initializes workout window */
 void workout_window_init();
 
-/* Frees up the workout window */
+/* Destroys the workout_window */
 void workout_window_deinit();
 
 /* Loads up the workout_window into memory */
