@@ -1,3 +1,4 @@
+#pragma once
 #include <pebble.h>
 
 extern Window *workout_window;
