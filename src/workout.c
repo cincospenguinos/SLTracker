@@ -30,7 +30,7 @@ void create_new_workout(){
   
   current_workout.mday = current_time->tm_mday;
   current_workout.month = current_time->tm_mon;
-  current_workout.year = current_time->tm_year + 1900; // We need to add on the extra years we have.
+  current_workout.year = current_time->tm_year + 1900; // We need to add on the extra years we have
 }
 
 const char * get_exercise_name(uint8_t exercise){

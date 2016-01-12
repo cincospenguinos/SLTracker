@@ -30,5 +30,8 @@ const char * get_exercise_name(uint8_t);
 /* Stores the workout at the next available space in persistent data. */
 void store_workout();
 
+/* Returns the name of the exercise requested given the workout provided */
+const char * get_exercise_name(uint8_t);
+
 /* Initializes the persistent data setup */
 void initialize_persistent_data();
