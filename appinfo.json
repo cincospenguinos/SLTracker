@@ -1,0 +1,18 @@
+{
+  "uuid": "e6044e56-44dd-4bb4-9a6a-21988f2341e3",
+  "shortName": "sltracker",
+  "longName": "sltracker",
+  "companyName": "MakeAwesomeHappen",
+  "versionLabel": "1.0",
+  "sdkVersion": "3",
+  "targetPlatforms": ["aplite", "basalt", "chalk"],
+  "watchapp": {
+    "watchface": false
+  },
+  "appKeys": {
+    "dummy": 0
+  },
+  "resources": {
+    "media": []
+  }
+}
