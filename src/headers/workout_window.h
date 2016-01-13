@@ -12,3 +12,18 @@ void workout_window_load();
 
 /* Unloads the workout window's elements from memory */
 void workout_window_unload();
+
+/* Defines the clicks for the workout window */
+void workout_window_click_config_provider();
+
+/* Adds one to the current set of reps */
+void add_one_current_reps(ClickRecognizerRef recognizer, void *context);
+
+/* Subtracts one from the current set of reps */
+void subtract_one_current_reps(ClickRecognizerRef recognizer, void *context);
+
+/* Move on to the next set */
+void go_to_next_set(ClickRecognizerRef recognizer, void *context);
+
+/* Move back to the previous set */
+void go_to_previous_set(ClickRecognizerRef recognizer, void *context);
