@@ -8,7 +8,7 @@ void init(){
 }
 
 void deinit(){
-  delete_all_data();
+  //delete_all_data();
   workout_window_deinit();
 }
 

@@ -114,6 +114,7 @@ void go_to_next_set(ClickRecognizerRef recognizer, void *context){
     update_set_text();
     break;
   case 7: // We need to save and quit
+    store_workout();
     window_stack_pop(true);
     break;
   default:
