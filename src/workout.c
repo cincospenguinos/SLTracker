@@ -1,4 +1,4 @@
-#include <pebble.h>
+//#include <pebble.h>
 #include "headers/workout.h"
 
 #define UNIT_OF_MEASUREMENT 7
@@ -11,7 +11,11 @@
 #define TOTAL_WORKOUTS 15
 #define WORKOUT_START_INDEX 16
 
-static Workout current_workout;
+static Workout current_workout; // The model - what we're storing the data in
+static int current_exercise;
+static int current_set;
+
+
 
 void create_new_workout(){
   current_workout.day_type = persist_read_bool(NEXT_DAY_KEY);
@@ -33,8 +37,8 @@ void create_new_workout(){
   current_workout.year = current_time->tm_year + 1900; // We need to add on the extra years we have
 }
 
-const char * get_exercise_name(uint8_t exercise){
-  switch(exercise){
+const char * get_current_exercise_name(){
+  switch(current_exercise){
   case 0:
     return "Squat";
   case 1:
@@ -50,6 +54,56 @@ const char * get_exercise_name(uint8_t exercise){
   default:
     return "ERROR!!!";
   }
+}
+
+int get_current_exercise_weight(){
+  return current_workout.weight[current_exercise];
+}
+
+int get_current_set(){
+  return current_set;
+}
+
+int get_current_rep_count(){
+  switch(current_exercise){
+  case 0:
+    return (int)current_workout.ex_sets1[current_set];
+  case 1:
+    return (int)current_workout.ex_sets2[current_set];
+  case 2:
+    return (int)current_workout.ex_sets3[current_set];
+  default:
+    APP_LOG(APP_LOG_LEVEL_ERROR, "This code should never run.");
+    return -1;
+  }
+}
+
+int next_set(){
+  if(++current_set == 5){
+    current_set = 0;
+
+    if(++current_exercise == 3){
+      return 7; // We have finished the workout
+    }
+
+    return 6; // We have moved on to the next exercise
+  }
+
+  return current_set + 1; // We are zero indexed, so we need to add one for workout_window to make sense of it.
+}
+
+int previous_set(){
+  if(--current_set == -1){
+    current_set = 4;
+
+    if(--current_exercise == -1){
+      return -1; // We quit the exercise
+    }
+
+    return 0; // We moved on to the previous exercise
+  }
+
+  return current_set + 1; // We are zero indexed, so we need to add one to make up
 }
 
 /*
@@ -68,3 +122,4 @@ void store_workout(Workout workout){
   persist_write_data(index, &workout, sizeof(workout));
   persist_write_int(TOTAL_WORKOUTS, total_workouts);
 }
+

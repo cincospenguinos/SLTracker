@@ -21,17 +21,37 @@ typedef struct Workout{
   bool day_type; // False = B day, ALWAYS.
 }__attribute__((__packed__)) Workout;
 
+/*
+ * Adapter functions for workout_window
+ */
+
 /* Creates a workout with today's date. */
 void create_new_workout();
 
 /* Returns the name of the exercise requested of the current workout*/
-const char * get_exercise_name(uint8_t);
+const char * get_current_exercise_name();
+
+/* Returns the weight of the current exercise */
+int get_current_exercise_weight();
+
+/* Returns the current working set of the current exercise */
+int get_current_set();
+
+/* Get the rep count of the current exercise given some set number */
+int get_rep_count(int);
+
+/* Returns the rep count of the current set. */
+int get_current_rep_count();
+
+/* Moves to next set. Returns the number of the next set (i.e. 1-5), 6 for the next exercise and 7 if the exercise is over*/
+int next_set();
+
+/* Moves to the previous set. Returns the number of the set (i.e. 1-5), 0 for the previous exercise and -1 if the workout is quit instead. */
+int previous_set();
 
 /* Stores the workout at the next available space in persistent data. */
 void store_workout();
 
-/* Returns the name of the exercise requested given the workout provided */
-const char * get_exercise_name(uint8_t);
-
 /* Initializes the persistent data setup */
 void initialize_persistent_data();
+
