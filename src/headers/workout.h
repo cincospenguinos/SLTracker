@@ -55,3 +55,6 @@ void store_workout();
 /* Initializes the persistent data setup */
 void initialize_persistent_data();
 
+/* Deletes all persistent data associated with this app. */
+void delete_all_data();
+

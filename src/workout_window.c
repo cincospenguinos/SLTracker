@@ -91,18 +91,18 @@ void workout_window_unload(void) {
 }
 
 void workout_window_click_config_provider(Window *window){
-	window_single_click_subscribe(BUTTON_ID_UP, add_one_current_reps);
-	window_single_click_subscribe(BUTTON_ID_DOWN, subtract_one_current_reps);
-	window_single_click_subscribe(BUTTON_ID_SELECT, go_to_next_set);
-	window_single_click_subscribe(BUTTON_ID_BACK, go_to_previous_set);
+  window_single_click_subscribe(BUTTON_ID_UP, add_one_current_reps);
+  window_single_click_subscribe(BUTTON_ID_DOWN, subtract_one_current_reps);
+  window_single_click_subscribe(BUTTON_ID_SELECT, go_to_next_set);
+  window_single_click_subscribe(BUTTON_ID_BACK, go_to_previous_set);
 }
 
 void add_one_current_reps(ClickRecognizerRef recognizer, void *context){
-  
+  // TODO: This
 }
 
 void subtract_one_current_reps(ClickRecognizerRef recognizer, void *context){
-
+  // TODO: This
 }
 
 void go_to_next_set(ClickRecognizerRef recognizer, void *context){

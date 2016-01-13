@@ -121,5 +121,21 @@ void store_workout(Workout workout){
 
   persist_write_data(index, &workout, sizeof(workout));
   persist_write_int(TOTAL_WORKOUTS, total_workouts);
+  persist_write_bool(NEXT_DAY_KEY, !workout.day_type);
 }
 
+void initialize_persistent_data(){
+  if(!persist_exists(TOTAL_WORKOUTS)){
+    persist_write_int(TOTAL_WORKOUTS, 0);
+    persist_write_bool(NEXT_DAY_KEY, true);
+    persist_write_int(SQUAT_WEIGHT_KEY, 45);
+    persist_write_int(BENCH_WEIGHT_KEY, 45);
+    persist_write_int(BENT_WEIGHT_KEY, 45);
+    persist_write_int(OVERHEAD_WEIGHT_KEY, 45);
+    persist_write_int(DEADLIFT_WEIGHT_KEY, 45);
+  }
+}
+
+void delete_all_data(){
+
+}
