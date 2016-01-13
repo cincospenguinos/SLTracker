@@ -61,7 +61,7 @@ int get_current_exercise_weight(){
 }
 
 int get_current_set(){
-  return current_set;
+  return current_set + 1;
 }
 
 int get_current_rep_count(){
@@ -89,7 +89,7 @@ int next_set(){
     return 6; // We have moved on to the next exercise
   }
 
-  return current_set + 1; // We are zero indexed, so we need to add one for workout_window to make sense of it.
+  return get_current_set();
 }
 
 int previous_set(){
@@ -103,7 +103,7 @@ int previous_set(){
     return 0; // We moved on to the previous exercise
   }
 
-  return current_set + 1; // We are zero indexed, so we need to add one to make up
+  return get_current_set(); // We are zero indexed, so we need to add one to make up
 }
 
 /*

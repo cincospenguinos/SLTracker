@@ -17,7 +17,7 @@ static BitmapLayer *current_rep_total; // The current total of reps
  */
 
 static void update_exercise_text();
-static void update_set_text(int);
+static void update_set_text();
 
 void workout_window_init(){
   create_new_workout();
@@ -77,6 +77,9 @@ void workout_window_load(void) {
   // current_rep_total
   current_rep_total = bitmap_layer_create(GRect(34, 48, 76, 76));
   layer_add_child(window_get_root_layer(workout_window), (Layer *)current_rep_total);
+
+  update_set_text();
+  update_exercise_text();
 }
 
 void workout_window_unload(void) {
@@ -108,6 +111,7 @@ void go_to_next_set(ClickRecognizerRef recognizer, void *context){
   switch(result){
   case 6: // We need to update the exercise information
     update_exercise_text();
+    update_set_text();
     break;
   case 7: // We need to save and quit
     window_stack_pop(true);
@@ -123,12 +127,13 @@ void go_to_previous_set(ClickRecognizerRef recognizer, void *context){
   switch(result){
   case 0: // We need to update the exercise information
     update_exercise_text();
+    update_set_text();
     break;
   case -1:// We need to quit the application
     window_stack_pop(true);
     break;
   default:
-    update_set_text(result);
+    update_set_text();
   }
 }
 
@@ -141,7 +146,8 @@ static void update_exercise_text(){
   text_layer_set_text(weight_text, weight_buffer);
 }
 
-static void update_set_text(int set){
+static void update_set_text(){
+  int set = get_current_set();
   static char set_buffer[7] = "  of 5";
   snprintf(set_buffer, sizeof(set_buffer), "%i of 5", set);
   text_layer_set_text(current_set_text, set_buffer);
