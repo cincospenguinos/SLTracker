@@ -1,4 +1,4 @@
-//#include <pebble.h>
+#include <pebble.h>
 #include "headers/workout.h"
 
 #define UNIT_OF_MEASUREMENT 7
