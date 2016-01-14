@@ -20,8 +20,6 @@ static Workout current_workout; // The model - what we're storing the data in
 static int current_exercise;
 static int current_set;
 
-
-
 void create_new_workout(){
   current_workout.day_type = persist_read_bool(NEXT_DAY_KEY);
   current_workout.weight[0] = persist_read_int(SQUAT_WEIGHT_KEY);
@@ -87,6 +85,8 @@ int get_current_rep_count(){
 }
 
 int next_set(){
+  APP_LOG(APP_LOG_LEVEL_INFO, "day_type: %i", current_workout.day_type);
+
   if(++current_set == 5){
     current_set = 0;
 
@@ -101,6 +101,7 @@ int next_set(){
 }
 
 int previous_set(){
+  APP_LOG(APP_LOG_LEVEL_INFO, "day_type: %i", current_workout.day_type);
   if(--current_set == -1){
     current_set = 4;
 
@@ -114,26 +115,44 @@ int previous_set(){
   return get_current_set(); // We are zero indexed, so we need to add one to make up
 }
 
-/*
-static Workout get_workout_at(int index){
-  Workout workout;
-  persist_read_data(WORKOUT_START_INDEX + index, &workout, sizeof(workout));
-  return workout;
+int add_rep(){
+  int reps = -1;
+
+  switch(current_exercise){
+  case 0:
+    if(current_workout.ex_sets1[current_set] < 5)
+      current_workout.ex_sets1[current_set]++;
+    
+    reps = current_workout.ex_sets1[current_set];
+    break;
+  case 1:
+    if(current_workout.ex_sets2[current_set] < 5)
+      current_workout.ex_sets2[current_set]++;
+
+    reps = current_workout.ex_sets2[current_set];
+    break;
+  case 2:
+    if(current_workout.ex_sets3[current_set] < 5)
+      current_workout.ex_sets3[current_set]++;
+
+    reps = current_workout.ex_sets3[current_set];
+
+  default:
+    APP_LOG(APP_LOG_LEVEL_ERROR, "This code should never run.");
+  }
+
+  return reps;
 }
-*/
 
 void store_workout(Workout workout){
+  APP_LOG(APP_LOG_LEVEL_INFO, "day_type: %i", current_workout.day_type);
+
   // Store the workout
   int index = persist_read_int(WORKOUT_START_INDEX);
   int total_workouts = persist_read_int(TOTAL_WORKOUTS);
   index += total_workouts;
 
-  persist_write_data(index, &workout, sizeof(workout));
-  persist_write_int(TOTAL_WORKOUTS, total_workouts);
-
-  APP_LOG(APP_LOG_LEVEL_INFO, "The actual value of day_type: %i", workout.day_type);
-
-  if(workout.day_type){ // If it's an A day, then it should be a B day next time
+  if(current_workout.day_type){ // If it's an A day, then it should be a B day next time
     persist_write_bool(NEXT_DAY_KEY, false);
     APP_LOG(APP_LOG_LEVEL_INFO, "The next day should be a B day.");
   }
@@ -141,6 +160,11 @@ void store_workout(Workout workout){
     persist_write_bool(NEXT_DAY_KEY, true);
     APP_LOG(APP_LOG_LEVEL_INFO, "The next day should be an A day.");
   }
+
+  persist_write_data(index, &workout, sizeof(workout));
+  persist_write_int(TOTAL_WORKOUTS, total_workouts);
+
+  APP_LOG(APP_LOG_LEVEL_INFO, "The actual value of day_type: %i", workout.day_type);
 
   // Store the weights as needed
   int ex_sum1 = 0;

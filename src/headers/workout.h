@@ -19,7 +19,7 @@ typedef struct Workout{
   int year; // Number of years since 1900
 
   bool day_type; // False = B day, ALWAYS.
-}__attribute__((__packed__)) Workout;
+} Workout;
 
 /*
  * Adapter functions for workout_window
@@ -49,6 +49,12 @@ int next_set();
 /* Moves to the previous set. Returns the number of the set (i.e. 1-5), 0 for the previous exercise and -1 if the workout is quit instead. */
 int previous_set();
 
+/* Adds a rep to the current set. Returns the current amount of reps */
+int add_rep();
+
+/* Removes a rep from the current set. Returns the current amount of reps. */
+int subtract_rep();
+
 /* Stores the workout at the next available space in persistent data. */
 void store_workout();
 
@@ -57,4 +63,3 @@ void initialize_persistent_data();
 
 /* Deletes all persistent data associated with this app. */
 void delete_all_data();
-
