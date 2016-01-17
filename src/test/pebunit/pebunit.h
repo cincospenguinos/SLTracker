@@ -10,8 +10,11 @@
 /* Definition of a pebble test */
 typedef void (*PEB_TEST)();
 
-/* Returns the result of value and prints the description and error message to the APP_LOG console */
+/* Returns the result of value, asserting that value is true */
 bool expect_true(bool value, char *description);
+
+/* Returns the result of expected == actual, asserting that it is true */
+bool expect_equal(int expected, int actual, char *description);
 
 /* Runs the test provided */
 void run_test(PEB_TEST test);

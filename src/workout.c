@@ -38,9 +38,6 @@ void create_new_workout(){
   current_workout.mday = current_time->tm_mday;
   current_workout.month = current_time->tm_mon;
   current_workout.year = current_time->tm_year + 1900; // We need to add on the extra years we have
-
-  APP_LOG(APP_LOG_LEVEL_INFO, "This workout's day type: %i", current_workout.day_type);
-  APP_LOG(APP_LOG_LEVEL_INFO, "From the horse's mouth: %i", persist_read_bool(NEXT_DAY_KEY));
 }
 
 const char * get_current_exercise_name(){

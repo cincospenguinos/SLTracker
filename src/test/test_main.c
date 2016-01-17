@@ -10,16 +10,28 @@
 #include "pebunit/pebunit.h"
 #include "../workout.c"
 
-void test_create_workout_1(){
-	create_new_workout();
+void startup(){
+  initialize_persistent_data();
+}
 
-	expect_true(get_current_set() == 1, "The initial set amount is 1.");
-	expect_true(get_current_rep_count() == 5, "The initial rep amount is 5.");
+void shutdown(){
+  delete_all_data();
+}
+
+void test_create_workout(){
+  create_new_workout();
+
+  expect_true(strcmp(get_current_exercise_name(), "Squat") == 0, "The first exercise is Squats.");
+  expect_true(get_current_set() == 1, "The initial set amount is 1.");
+  expect_equal(5, get_current_rep_count(), "The initial rep amount is 5.");
+  expect_equal(45, get_current_exercise_weight(), "The initial exercise weight size is 45 lbs.");
 }
 
 void run_all_tests(){
-	run_test(test_create_workout_1);
-	report();
+  startup();
+  run_test(test_create_workout);
+  shutdown();
+  report();
 }
 
 int main(int argc, char **argv) {
