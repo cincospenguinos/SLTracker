@@ -144,6 +144,35 @@ int add_rep(){
   return reps;
 }
 
+int subtract_rep(){
+  int reps = -1;
+
+  switch(current_exercise){
+  case 0:
+    if(current_workout.ex_sets1[current_set] > 0)
+      current_workout.ex_sets1[current_set]--;
+    
+    reps = current_workout.ex_sets1[current_set];
+    break;
+  case 1:
+    if(current_workout.ex_sets2[current_set] > 0)
+      current_workout.ex_sets2[current_set]++;
+
+    reps = current_workout.ex_sets2[current_set];
+    break;
+  case 2:
+    if(current_workout.ex_sets3[current_set] > 0)
+      current_workout.ex_sets3[current_set]++;
+
+    reps = current_workout.ex_sets3[current_set];
+
+  default:
+    APP_LOG(APP_LOG_LEVEL_ERROR, "This code should never run.");
+  }
+
+  return reps;
+}
+
 void store_workout(Workout workout){
   APP_LOG(APP_LOG_LEVEL_INFO, "day_type: %i", current_workout.day_type);
 

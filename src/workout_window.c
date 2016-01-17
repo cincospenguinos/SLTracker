@@ -14,6 +14,11 @@ static TextLayer *exercise_text; // The current exercise text
 static BitmapLayer *current_rep_total; // The current total of reps
 
 // Some bitmaps
+static GBitmap *zero_bitmap;
+static GBitmap *one_bitmap;
+static GBitmap *two_bitmap;
+static GBitmap *three_bitmap;
+static GBitmap *four_bitmap;
 static GBitmap *five_bitmap;
 
 /*
@@ -22,6 +27,7 @@ static GBitmap *five_bitmap;
 
 static void update_exercise_text();
 static void update_set_text();
+static void update_reps();
 static void timer_bar_draw_proc(Layer *layer, GContext *ctx);
 static void timer_callback(int seconds);
 
@@ -58,6 +64,14 @@ void workout_window_load(void) {
   s_res_gothic_18 = fonts_get_system_font(FONT_KEY_GOTHIC_18);
   s_res_gothic_28_bold = fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD);
 
+  // bitmaps
+  zero_bitmap = gbitmap_create_with_resource(RESOURCE_ID_ZERO);
+  one_bitmap = gbitmap_create_with_resource(RESOURCE_ID_ONE);
+  two_bitmap = gbitmap_create_with_resource(RESOURCE_ID_TWO);
+  three_bitmap = gbitmap_create_with_resource(RESOURCE_ID_THREE);
+  four_bitmap = gbitmap_create_with_resource(RESOURCE_ID_FOUR);
+  five_bitmap = gbitmap_create_with_resource(RESOURCE_ID_FIVE);
+
   // timer_bar
   timer_bar = layer_create(GRect(12, 130, 120, 10));
   layer_set_update_proc(timer_bar, timer_bar_draw_proc);
@@ -85,7 +99,6 @@ void workout_window_load(void) {
   layer_add_child(window_get_root_layer(workout_window), (Layer *)exercise_text);
   
   // current_rep_total
-  five_bitmap = gbitmap_create_with_resource(RESOURCE_ID_FIVE);
   current_rep_total = bitmap_layer_create(GRect(34, 48, 76, 76));
   bitmap_layer_set_bitmap(current_rep_total, five_bitmap);
   layer_add_child(window_get_root_layer(workout_window), (Layer *)current_rep_total);
@@ -111,11 +124,13 @@ void workout_window_click_config_provider(Window *window){
 }
 
 void add_one_current_reps(ClickRecognizerRef recognizer, void *context){
-  // TODO: This
+  add_rep();
+  update_reps();
 }
 
 void subtract_one_current_reps(ClickRecognizerRef recognizer, void *context){
-  // TODO: This
+  subtract_rep();
+  update_reps();
 }
 
 void go_to_next_set(ClickRecognizerRef recognizer, void *context){
@@ -203,4 +218,32 @@ static void timer_callback(int seconds){
 
   if(workout_timer_is_running())
     layer_mark_dirty(timer_bar);
+}
+
+static void update_reps(){
+  GBitmap *bitmap;
+  switch(get_current_rep_count()){
+  case 0:
+    bitmap = zero_bitmap;
+    break;
+  case 1:
+    bitmap = one_bitmap;
+    break;
+  case 2:
+    bitmap = two_bitmap;
+    break;
+  case 3:
+    bitmap = three_bitmap;
+    break;
+  case 4:
+    bitmap = four_bitmap;
+    break;
+  case 5:
+    bitmap = five_bitmap;
+    break;
+  default:
+    bitmap = NULL;
+  }
+
+  bitmap_layer_set_bitmap(current_rep_total, bitmap);
 }

@@ -16,10 +16,34 @@
     "media": [
 	{
 	    "type" : "bitmap",
+	    "name" : "ZERO",
+	    "file" : "zero.png"
+	},
+	{
+	    "type" : "bitmap",
+	    "name" : "ONE",
+	    "file" : "one.png"
+	},
+	{
+	    "type" : "bitmap",
+	    "name" : "TWO",
+	    "file" : "two.png"
+	},
+	{
+	    "type" : "bitmap",
+	    "name" : "THREE",
+	    "file" : "three.png"
+	},
+	{
+	    "type" : "bitmap",
+	    "name" : "FOUR",
+	    "file" : "four.png"
+	},
+	{
+	    "type" : "bitmap",
 	    "name" : "FIVE",
 	    "file" : "five.png"
 	}
-
     ]
   }
 }
