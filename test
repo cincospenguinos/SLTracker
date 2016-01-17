@@ -5,6 +5,6 @@
 mv wscript wscript-build
 mv wscript-test wscript
 pebble build
-pebble install --emulator basalt
+pebble install --emulator basalt --logs >> test_log.txt &
 mv wscript wscript-test
 mv wscript-build wscript
