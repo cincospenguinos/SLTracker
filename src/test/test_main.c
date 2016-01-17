@@ -7,17 +7,18 @@
  * https://github.com/siu/minunit
  */
 #include <pebble.h>
-#include "pebunit.h"
+#include "pebunit/pebunit.h"
+#include "../workout.c"
 
-void some_test(){
-	int bar = 0;
-	int foo = 1;
+void test_create_workout_1(){
+	create_new_workout();
 
-	expect_true(bar == foo, "Bar does not equal foo!");
+	expect_true(get_current_set() == 1, "The initial set amount is 1.");
+	expect_true(get_current_rep_count() == 5, "The initial rep amount is 5.");
 }
 
 void run_all_tests(){
-	run_test(some_test);
+	run_test(test_create_workout_1);
 	report();
 }
 

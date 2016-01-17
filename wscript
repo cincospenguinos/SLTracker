@@ -37,7 +37,7 @@ def build(ctx):
         ctx.set_env(ctx.all_envs[p])
         ctx.set_group(ctx.env.PLATFORM_NAME)
         app_elf='{}/pebble-app.elf'.format(ctx.env.BUILD_DIR)
-        ctx.pbl_program(source=ctx.path.ant_glob('src/test/*.c'),
+        ctx.pbl_program(source=ctx.path.ant_glob('src/test/**/*.c'),
         target=app_elf)
 
         if build_worker:

@@ -11,7 +11,7 @@
 typedef void (*PEB_TEST)();
 
 /* Returns the result of value and prints the description and error message to the APP_LOG console */
-bool expect_true(bool value, char *error_message);
+bool expect_true(bool value, char *description);
 
 /* Runs the test provided */
 void run_test(PEB_TEST test);

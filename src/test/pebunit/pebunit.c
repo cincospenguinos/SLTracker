@@ -5,9 +5,11 @@ static int total_tests = 0;
 static int assertions = 0;
 static int assertions_failed = 0;
 
-bool expect_true(bool value, char *error_message){
+bool expect_true(bool value, char *description){
+	APP_LOG(APP_LOG_LEVEL_INFO, "%s", description);
 	if(!(value)) {
-		APP_LOG(APP_LOG_LEVEL_ERROR, "%s", error_message);
+		APP_LOG(APP_LOG_LEVEL_ERROR, "Assertion failed! Expected <true> but was <false>");
+
 		assertions_failed++;
 	}
 
