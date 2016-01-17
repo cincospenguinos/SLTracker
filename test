@@ -1,6 +1,7 @@
 #!/bin/bash
 #
 # Runs the test version of this app
+
 mv wscript wscript-build
 mv wscript-test wscript
 pebble build
