@@ -12,7 +12,13 @@ static TextLayer *current_set_text; // The current set's text
 static TextLayer *exercise_text; // The current exercise text
 static BitmapLayer *current_rep_total; // The current total of reps
 
+// Some bitmaps
 static GBitmap *five_bitmap;
+
+// Timer variables
+static AppTimer *timer;
+static int seconds_elapsed;
+static bool between_sets;
 
 /*
  * Some quick function declarations here specific to this file
@@ -21,6 +27,7 @@ static GBitmap *five_bitmap;
 static void update_exercise_text();
 static void update_set_text();
 static void timer_bar_draw_proc(Layer *layer, GContext *ctx);
+static void timer_callback();
 
 void workout_window_init(){
   create_new_workout();
@@ -28,6 +35,8 @@ void workout_window_init(){
   if(workout_window == NULL){
     workout_window = window_create();
   }
+
+  timer = app_timer_register(1000, (AppTimerCallback)timer_callback, NULL);
 
   #ifndef PBL_SDK_3
     window_set_fullscreen(workout_window, true);
@@ -43,8 +52,9 @@ void workout_window_init(){
   window_stack_push(workout_window, true);
 }
 
-void workout_window_deinit(){
-  window_destroy(workout_window);
+void workout_window_deinit(){  
+  if(workout_window != NULL)
+    window_destroy(workout_window);
 }
 
 void workout_window_load(void) {
@@ -183,7 +193,16 @@ static void timer_bar_draw_proc(Layer *layer, GContext *ctx){
 
 #ifdef PBL_COLOR
   graphics_context_set_stroke_width(ctx, 3);
+  graphics_context_set_antialiased(ctx, true);
 #endif
 
   graphics_draw_line(ctx, left_pt, right_pt);
+}
+
+static void timer_callback(){
+  if(between_sets){
+    seconds_elapsed++;
+  }
+
+  app_timer_register(1000, timer_callback, NULL);
 }
