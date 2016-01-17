@@ -12,3 +12,5 @@ build/
 \#*.*
 \.\#*.*
 *.txt
+screenshots/
+p_build-run

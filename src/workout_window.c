@@ -12,12 +12,15 @@ static TextLayer *current_set_text; // The current set's text
 static TextLayer *exercise_text; // The current exercise text
 static BitmapLayer *current_rep_total; // The current total of reps
 
+static GBitmap *five_bitmap;
+
 /*
  * Some quick function declarations here specific to this file
  */
 
 static void update_exercise_text();
 static void update_set_text();
+static void timer_bar_draw_proc(Layer *layer, GContext *ctx);
 
 void workout_window_init(){
   create_new_workout();
@@ -51,6 +54,7 @@ void workout_window_load(void) {
 
   // timer_bar
   timer_bar = layer_create(GRect(12, 130, 120, 10));
+  layer_set_update_proc(timer_bar, timer_bar_draw_proc);
   layer_add_child(window_get_root_layer(workout_window), (Layer *)timer_bar);
   
   // weight_text
@@ -75,7 +79,9 @@ void workout_window_load(void) {
   layer_add_child(window_get_root_layer(workout_window), (Layer *)exercise_text);
   
   // current_rep_total
+  five_bitmap = gbitmap_create_with_resource(RESOURCE_ID_FIVE);
   current_rep_total = bitmap_layer_create(GRect(34, 48, 76, 76));
+  bitmap_layer_set_bitmap(current_rep_total, five_bitmap);
   layer_add_child(window_get_root_layer(workout_window), (Layer *)current_rep_total);
 
   update_set_text();
@@ -88,6 +94,7 @@ void workout_window_unload(void) {
   text_layer_destroy(current_set_text);
   text_layer_destroy(exercise_text);
   bitmap_layer_destroy(current_rep_total);
+  gbitmap_destroy(five_bitmap);
 }
 
 void workout_window_click_config_provider(Window *window){
@@ -152,4 +159,25 @@ static void update_set_text(){
   static char set_buffer[7] = "  of 5";
   snprintf(set_buffer, sizeof(set_buffer), "%i of 5", set);
   text_layer_set_text(current_set_text, set_buffer);
+}
+
+// Helper method for draw_proc of timer_bar
+static void draw_ticks_timer_bar(Layer *layer, GContext *ctx){
+  const GPoint left_pt1 = GPoint(0, 0);
+  const GPoint left_pt2 = GPoint(0, 10);
+  const GPoint right_pt1 = GPoint(119, 0);
+  const GPoint right_pt2 = GPoint(119, 10);
+
+  graphics_context_set_stroke_color(ctx, GColorBlack);
+  graphics_draw_line(ctx, left_pt1, left_pt2);
+  graphics_draw_line(ctx, right_pt1, right_pt2);
+}
+
+static void timer_bar_draw_proc(Layer *layer, GContext *ctx){
+  // Note that these points have a RELATIVE set of axes. They do NOT use the
+  // the global ones. i.e. 0, 0 here equates to 15, 130 on the whole pebble.
+  draw_ticks_timer_bar(layer, ctx);
+  
+
+  
 }
