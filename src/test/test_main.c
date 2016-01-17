@@ -25,25 +25,65 @@ void test_create_workout(){
   expect_true(get_current_set() == 1, "The initial set amount is 1.");
   expect_equal(5, get_current_rep_count(), "The initial rep amount is 5.");
   expect_equal(45, get_current_exercise_weight(), "The initial exercise weight size is 45 lbs.");
+
+  delete_all_data();
+}
+
+void test_next_set(){
+  create_new_workout();
+
+  for(int i = 0; i < 3; i++){
+    for(int i = 1; i <= 5; i++){
+      char buffer[24] = "Current set should be 1";
+      snprintf(buffer, sizeof(buffer), "Current set should be %i", i);
+      expect_equal(i, get_current_set(), buffer);
+      next_set();
+    }
+  }
+
+  delete_all_data();
+}
+
+void test_reps(){
+  create_new_workout();
+
+  if (!(expect_equal(5, get_current_rep_count(), "Current rep count is equal to 5.")))
+    return;
+
+  int reps = 5;
+
+  for(int i = 0; i < 20; i++){
+    switch(rand() % 2){
+    case 0:
+      add_rep();
+      if(reps < 5)
+	reps++;
+      break;
+    case 1:
+      subtract_rep();
+      if(reps > 0)
+	reps--;
+      break;
+    default:
+      break;
+    }
+
+    expect_equal(reps, get_current_rep_count(), "The amount of reps should equal each other.");
+  }
+
+  delete_all_data();
 }
 
 void run_all_tests(){
   startup();
   run_test(test_create_workout);
+  run_test(test_next_set);
+  run_test(test_reps);
   shutdown();
   report();
 }
 
 int main(int argc, char **argv) {
-	run_all_tests();
-	app_event_loop();
+  run_all_tests();
+  app_event_loop();
 }
-
-
-
-
-
-
-
-
-
