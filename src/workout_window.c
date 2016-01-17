@@ -32,7 +32,7 @@ void workout_window_init(){
     workout_window = window_create();
   }
 
-  workout_timer_create((WorkoutTimerCallback) timer_callback);
+  workout_timer_start((WorkoutTimerCallback) timer_callback);
 
   #ifndef PBL_SDK_3
     window_set_fullscreen(workout_window, true);
@@ -184,8 +184,10 @@ static void timer_bar_draw_proc(Layer *layer, GContext *ctx){
   // the global ones. i.e. 0, 0 here equates to 15, 130 on the whole pebble.
   draw_ticks_timer_bar(layer, ctx);
   
+  int xPos = (int)(4.0 / 3.0 * ((float) workout_timer_elapsed_seconds()));
+
   const GPoint left_pt = GPoint(0, 5);
-  GPoint right_pt = GPoint(35, 5);
+  GPoint right_pt = GPoint(xPos, 5);
 
 #ifdef PBL_COLOR
   graphics_context_set_stroke_width(ctx, 3);
@@ -196,5 +198,9 @@ static void timer_bar_draw_proc(Layer *layer, GContext *ctx){
 }
 
 static void timer_callback(int seconds){
-  APP_LOG(APP_LOG_LEVEL_INFO, "%i seconds", seconds);
+  if(seconds == 6)
+    workout_timer_cancel();
+
+  if(workout_timer_is_running())
+    layer_mark_dirty(timer_bar);
 }
