@@ -1,5 +1,6 @@
 #include "headers/workout_window.h"
 #include "headers/workout.h"
+#include "headers/workout_timer.h"
 
 static Window *workout_window; // Declared in the header; allocated here.
 
@@ -15,11 +16,6 @@ static BitmapLayer *current_rep_total; // The current total of reps
 // Some bitmaps
 static GBitmap *five_bitmap;
 
-// Timer variables
-static AppTimer *timer;
-static int seconds_elapsed;
-static bool between_sets;
-
 /*
  * Some quick function declarations here specific to this file
  */
@@ -27,7 +23,7 @@ static bool between_sets;
 static void update_exercise_text();
 static void update_set_text();
 static void timer_bar_draw_proc(Layer *layer, GContext *ctx);
-static void timer_callback();
+static void timer_callback(int seconds);
 
 void workout_window_init(){
   create_new_workout();
@@ -36,7 +32,7 @@ void workout_window_init(){
     workout_window = window_create();
   }
 
-  timer = app_timer_register(1000, (AppTimerCallback)timer_callback, NULL);
+  workout_timer_create((WorkoutTimerCallback) timer_callback);
 
   #ifndef PBL_SDK_3
     window_set_fullscreen(workout_window, true);
@@ -199,10 +195,6 @@ static void timer_bar_draw_proc(Layer *layer, GContext *ctx){
   graphics_draw_line(ctx, left_pt, right_pt);
 }
 
-static void timer_callback(){
-  if(between_sets){
-    seconds_elapsed++;
-  }
-
-  app_timer_register(1000, timer_callback, NULL);
+static void timer_callback(int seconds){
+  APP_LOG(APP_LOG_LEVEL_INFO, "%i seconds", seconds);
 }
