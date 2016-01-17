@@ -28,6 +28,9 @@ typedef struct Workout{
 /* Creates a workout with today's date. */
 void create_new_workout();
 
+/* Returns true if today is an A day */
+bool is_day_type_A();
+
 /* Returns the name of the exercise requested of the current workout*/
 const char * get_current_exercise_name();
 
@@ -57,6 +60,8 @@ int subtract_rep();
 
 /* Stores the workout at the next available space in persistent data. */
 void store_workout();
+
+void store_current_workout();
 
 /* Initializes the persistent data setup */
 void initialize_persistent_data();

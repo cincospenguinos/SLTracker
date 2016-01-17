@@ -21,6 +21,9 @@ static int current_exercise;
 static int current_set;
 
 void create_new_workout(){
+  current_set = 0;
+  current_exercise = 0;
+
   current_workout.day_type = persist_read_bool(NEXT_DAY_KEY);
   current_workout.weight[0] = persist_read_int(SQUAT_WEIGHT_KEY);
   
@@ -39,8 +42,11 @@ void create_new_workout(){
   current_workout.month = current_time->tm_mon;
   current_workout.year = current_time->tm_year + 1900; // We need to add on the extra years we have
 
-  APP_LOG(APP_LOG_LEVEL_INFO, "This workout's day type: %i", current_workout.day_type);
-  APP_LOG(APP_LOG_LEVEL_INFO, "From the horse's mouth: %i", persist_read_bool(NEXT_DAY_KEY));
+  for(int i = 0; i < 5; i++){
+    current_workout.ex_sets1[i] = 5;
+    current_workout.ex_sets2[i] = 5;
+    current_workout.ex_sets3[i] = 5;
+  }
 }
 
 const char * get_current_exercise_name(){
@@ -62,6 +68,10 @@ const char * get_current_exercise_name(){
   }
 }
 
+bool is_day_type_A(){
+  return current_workout.day_type;
+}
+
 int get_current_exercise_weight(){
   return current_workout.weight[current_exercise];
 }
@@ -79,14 +89,12 @@ int get_current_rep_count(){
   case 2:
     return (int)current_workout.ex_sets3[current_set];
   default:
-    APP_LOG(APP_LOG_LEVEL_ERROR, "This code should never run.");
+    APP_LOG(APP_LOG_LEVEL_ERROR, "This code should never run. ---> get_current_rep_count()");
     return -1;
   }
 }
 
 int next_set(){
-  APP_LOG(APP_LOG_LEVEL_INFO, "day_type: %i", current_workout.day_type);
-
   if(++current_set == 5){
     current_set = 0;
 
@@ -101,7 +109,6 @@ int next_set(){
 }
 
 int previous_set(){
-  APP_LOG(APP_LOG_LEVEL_INFO, "day_type: %i", current_workout.day_type);
   if(--current_set == -1){
     current_set = 4;
 
@@ -136,9 +143,9 @@ int add_rep(){
       current_workout.ex_sets3[current_set]++;
 
     reps = current_workout.ex_sets3[current_set];
-
+    break;
   default:
-    APP_LOG(APP_LOG_LEVEL_ERROR, "This code should never run.");
+    APP_LOG(APP_LOG_LEVEL_ERROR, "This code should never run. --> add_rep");
   }
 
   return reps;
@@ -165,17 +172,19 @@ int subtract_rep(){
       current_workout.ex_sets3[current_set]++;
 
     reps = current_workout.ex_sets3[current_set];
-
+    break;
   default:
-    APP_LOG(APP_LOG_LEVEL_ERROR, "This code should never run.");
+    APP_LOG(APP_LOG_LEVEL_ERROR, "This code should never run. --> subtract_rep");
   }
 
   return reps;
 }
 
-void store_workout(Workout workout){
-  APP_LOG(APP_LOG_LEVEL_INFO, "day_type: %i", current_workout.day_type);
+void store_current_workout(){
+  store_workout(current_workout);
+}
 
+void store_workout(Workout workout){
   // Store the workout
   int index = persist_read_int(WORKOUT_START_INDEX);
   int total_workouts = persist_read_int(TOTAL_WORKOUTS);
@@ -183,17 +192,13 @@ void store_workout(Workout workout){
 
   if(current_workout.day_type){ // If it's an A day, then it should be a B day next time
     persist_write_bool(NEXT_DAY_KEY, false);
-    APP_LOG(APP_LOG_LEVEL_INFO, "The next day should be a B day.");
   }
   else{
     persist_write_bool(NEXT_DAY_KEY, true);
-    APP_LOG(APP_LOG_LEVEL_INFO, "The next day should be an A day.");
   }
 
   persist_write_data(index, &workout, sizeof(workout));
   persist_write_int(TOTAL_WORKOUTS, total_workouts);
-
-  APP_LOG(APP_LOG_LEVEL_INFO, "The actual value of day_type: %i", workout.day_type);
 
   // Store the weights as needed
   int ex_sum1 = 0;
