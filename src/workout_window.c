@@ -178,6 +178,12 @@ static void timer_bar_draw_proc(Layer *layer, GContext *ctx){
   // the global ones. i.e. 0, 0 here equates to 15, 130 on the whole pebble.
   draw_ticks_timer_bar(layer, ctx);
   
+  const GPoint left_pt = GPoint(0, 5);
+  GPoint right_pt = GPoint(35, 5);
 
-  
+#ifdef PBL_COLOR
+  graphics_context_set_stroke_width(ctx, 3);
+#endif
+
+  graphics_draw_line(ctx, left_pt, right_pt);
 }
