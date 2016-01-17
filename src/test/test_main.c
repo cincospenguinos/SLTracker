@@ -74,11 +74,38 @@ void test_reps(){
   delete_all_data();
 }
 
+void test_store_workout_typeA(){
+  initialize_persistent_data();
+  create_new_workout();
+
+  if(!expect_true(is_day_type_A(), "The current workout day is A."))
+    return;
+
+  for(int i = 0; i < 15; i++){
+    next_set();
+  }
+
+  store_current_workout();
+
+  // Now we should have workout type A stored away and we can assert that when we create
+  // a new workout, various things should be different.
+
+  create_new_workout();
+  expect_true(!is_day_type_A(), "The current workout day is now B.");
+  expect_equal(1, get_current_set(), "The current set is 1.");
+  expect_equal(5, get_current_rep_count(), "The current rep count is 5.");
+  expect_equal(50, get_current_exercise_weight(), "The current squat weight is 50 lbs");
+  expect_true(strcmp(get_current_exercise_name(), "Squat") == 0, "The current exercise is Squats.");
+
+  delete_all_data();
+}
+
 void run_all_tests(){
   startup();
   run_test(test_create_workout);
   run_test(test_next_set);
   run_test(test_reps);
+  run_test(test_store_workout_typeA);
   shutdown();
   report();
 }

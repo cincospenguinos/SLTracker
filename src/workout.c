@@ -68,6 +68,10 @@ const char * get_current_exercise_name(){
   }
 }
 
+bool is_day_type_A(){
+  return current_workout.day_type;
+}
+
 int get_current_exercise_weight(){
   return current_workout.weight[current_exercise];
 }
@@ -174,6 +178,10 @@ int subtract_rep(){
   }
 
   return reps;
+}
+
+void store_current_workout(){
+  store_workout(current_workout);
 }
 
 void store_workout(Workout workout){
