@@ -5,7 +5,7 @@
 # Feel free to customize this to your needs.
 #
 
-import os.path
+import os
 
 top = '.'
 out = 'build'
@@ -17,6 +17,22 @@ def configure(ctx):
     ctx.load('pebble_sdk')
 
 def build(ctx):
+    '''NOTE: This is something I added so that various emacs
+             buffers would be removed with each build (a
+	     build and clean, if you will)'''
+    print 'Cleaning src directory...'
+    
+    filelist = [f for f in os.listdir("src/") if f.endswith(".c~")]
+    
+    for f in filelist:
+        os.remove("src/" + f)
+
+    filelist = [f for f in os.listdir("src/headers/") if f.endswith(".h~")]
+
+    for f in filelist:
+        os.remove("src/headers/" + f)
+    
+
     ctx.load('pebble_sdk')
 
     build_worker = os.path.exists('worker_src')
