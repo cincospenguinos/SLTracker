@@ -5,6 +5,8 @@
 mv wscript wscript-build
 mv wscript-test wscript
 pebble build
+echo 'SL App test' > test_log.txt
+echo `date +%Y-%m-%d` >> test_log.txt
 pebble install --emulator basalt --logs >> test_log.txt &
 mv wscript wscript-test
 mv wscript-build wscript

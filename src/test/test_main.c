@@ -100,12 +100,42 @@ void test_store_workout_typeA(){
   delete_all_data();
 }
 
+void test_wait_times(){
+  initialize_persistent_data();
+  create_new_workout();
+
+  for(int i = 1; i <= 5; i++){
+    switch(rand() % 2){
+    case 0:
+      // Set reps up to 5; wait time should be 90 seconds
+      next_set();
+      expect_equal(90, get_wait_time(), "Successful sets should have a wait time of 90 seconds.");
+      break;
+    case 1:
+      // Set reps to < 5; wait time should be 300 seconds
+      subtract_rep();
+      next_set();
+      expect_equal(300, get_wait_time(), "Failed sets should have a wait time of 300 seconds.");
+      break;
+    }
+  }
+
+  // Special case: when we change workouts, there should be no wait time.
+  expect_equal(0, get_wait_time(), "Switching exercises should return no wait time.");
+  delete_all_data();
+}
+
+void test_deadlift_logic(){
+  // TODO: This
+}
+
 void run_all_tests(){
   startup();
   run_test(test_create_workout);
   run_test(test_next_set);
   run_test(test_reps);
   run_test(test_store_workout_typeA);
+  run_test(test_wait_times);
   shutdown();
   report();
 }

@@ -96,21 +96,21 @@ int get_current_rep_count(){
 }
 
 int next_set(){
-  // TODO: This will be an issue at a later point in time. We should not be
-  // setting the wait time at all if we move along to the next exercise.
-
-  // We need to update the amount of time to wait.
   if(get_current_rep_count() == 5)
     wait_time = 90;
   else
-    wait_time = 300; // the wait time is 5 minutes
+    wait_time = 300;
 
+  // We need to update the amount of time to wait.
   if(++current_set == 5){
     current_set = 0;
 
     if(++current_exercise == 3){
       return 7; // We have finished the workout
     }
+
+    // Make sure the wait time is zero
+    wait_time = 0;
 
     return 6; // We have moved on to the next exercise
   }
