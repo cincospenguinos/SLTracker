@@ -27,3 +27,6 @@ void go_to_next_set(ClickRecognizerRef recognizer, void *context);
 
 /* Move back to the previous set */
 void go_to_previous_set(ClickRecognizerRef recognizer, void *context);
+
+/* The amount of time to wait before the next set. */
+int wait_time();

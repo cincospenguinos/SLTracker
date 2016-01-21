@@ -40,6 +40,9 @@ int get_current_exercise_weight();
 /* Returns the current working set of the current exercise */
 int get_current_set();
 
+/* Returns the amount of time necessary to wait between sets */
+int get_wait_time();
+
 /* Get the rep count of the current exercise given some set number */
 int get_rep_count(int);
 
@@ -68,3 +71,9 @@ void initialize_persistent_data();
 
 /* Deletes all persistent data associated with this app. */
 void delete_all_data();
+
+/* Returns the current weight in pounds */
+int current_weight_lbs();
+
+/* Returns the current weight in kilos */
+float current_weight_kilos();

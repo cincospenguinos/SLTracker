@@ -19,6 +19,7 @@
 static Workout current_workout; // The model - what we're storing the data in
 static int current_exercise;
 static int current_set;
+static int wait_time;
 
 void create_new_workout(){
   current_set = 0;
@@ -95,6 +96,15 @@ int get_current_rep_count(){
 }
 
 int next_set(){
+  // TODO: This will be an issue at a later point in time. We should not be
+  // setting the wait time at all if we move along to the next exercise.
+
+  // We need to update the amount of time to wait.
+  if(get_current_rep_count() == 5)
+    wait_time = 90;
+  else
+    wait_time = 300; // the wait time is 5 minutes
+
   if(++current_set == 5){
     current_set = 0;
 
@@ -255,4 +265,18 @@ void delete_all_data(){
   persist_delete(BENT_WEIGHT_KEY);
   persist_delete(OVERHEAD_WEIGHT_KEY);
   persist_delete(DEADLIFT_WEIGHT_KEY);
+}
+
+int get_wait_time(){
+  return wait_time;
+}
+
+int current_weight_lbs(){
+  return current_workout.weight[current_exercise];
+}
+
+float current_weight_kilos(){
+  // We're going to do an approximation so that it makes sense in the workout routine.
+  // You add 2.5 kilos each workout, which is ~5lbs
+  return 0.5 * (current_workout.weight[current_exercise] * 1.0);
 }

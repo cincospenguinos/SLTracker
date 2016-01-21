@@ -213,9 +213,6 @@ static void timer_bar_draw_proc(Layer *layer, GContext *ctx){
 }
 
 static void timer_callback(int seconds){
-  if(seconds == 6)
-    workout_timer_cancel();
-
   if(workout_timer_is_running())
     layer_mark_dirty(timer_bar);
 }
