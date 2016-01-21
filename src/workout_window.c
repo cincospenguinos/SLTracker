@@ -146,7 +146,7 @@ void go_to_next_set(ClickRecognizerRef recognizer, void *context){
     window_stack_pop(true);
     break;
   default:
-    update_set_text(result);
+    update_set_text();
   }
 
   // Always, always, start the workout timer again
@@ -229,8 +229,10 @@ static void timer_bar_draw_proc(Layer *layer, GContext *ctx){
 
 static void timer_callback(int seconds){
   if(workout_timer_is_running()){
-    APP_LOG(APP_LOG_LEVEL_INFO, "%i seconds", seconds);
     
+    
+    // For now, always update everything
+    update_set_text();
     layer_mark_dirty(timer_bar);
   }
 }
