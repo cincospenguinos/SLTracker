@@ -64,6 +64,7 @@ int subtract_rep();
 /* Stores the workout at the next available space in persistent data. */
 void store_workout();
 
+/* Stores the current workout, as it exists, into persistent memory */
 void store_current_workout();
 
 /* Initializes the persistent data setup */

@@ -19,13 +19,13 @@ void workout_timer_start(WorkoutTimerCallback callback){
 }
 
 void workout_timer_restart(){
-  run_timer = false;
   timer = app_timer_register(1000, workout_timer_internal_callback, NULL);
+  run_timer = true;
 }
 
 void workout_timer_stop(){
-  APP_LOG(APP_LOG_LEVEL_INFO, "Cancelling timer!");
   run_timer = false;
+  app_timer_cancel(timer);
 }
 
 void workout_timer_cancel(){

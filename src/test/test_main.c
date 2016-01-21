@@ -129,6 +129,11 @@ void test_deadlift_logic(){
   // TODO: This
 }
 
+void test_correct_weight_kilos(){
+  create_new_workout();
+  // TODO: This
+}
+
 void run_all_tests(){
   startup();
   run_test(test_create_workout);
@@ -136,6 +141,8 @@ void run_all_tests(){
   run_test(test_reps);
   run_test(test_store_workout_typeA);
   run_test(test_wait_times);
+  run_test(test_deadlift_logic);
+  run_test(test_correct_weight_kilos);
   shutdown();
   report();
 }

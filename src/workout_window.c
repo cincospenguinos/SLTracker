@@ -38,7 +38,7 @@ void workout_window_init(){
     workout_window = window_create();
   }
 
-  workout_timer_start((WorkoutTimerCallback) timer_callback);
+  // workout_timer_start((WorkoutTimerCallback) timer_callback);
 
   #ifndef PBL_SDK_3
     window_set_fullscreen(workout_window, true);
@@ -148,6 +148,9 @@ void go_to_next_set(ClickRecognizerRef recognizer, void *context){
   default:
     update_set_text(result);
   }
+
+  // Always, always, start the workout timer again
+  workout_timer_start(timer_callback);
 }
 
 void go_to_previous_set(ClickRecognizerRef recognizer, void *context){
@@ -164,6 +167,9 @@ void go_to_previous_set(ClickRecognizerRef recognizer, void *context){
   default:
     update_set_text();
   }
+
+  // Always, always, cancel the workout_timer when moving backwards
+  workout_timer_cancel();
 }
 
 static void update_exercise_text(){
@@ -176,9 +182,16 @@ static void update_exercise_text(){
 }
 
 static void update_set_text(){
-  int set = get_current_set();
-  static char set_buffer[7] = "  of 5";
-  snprintf(set_buffer, sizeof(set_buffer), "%i of 5", set);
+  static char set_buffer[16] = "Wait    seconds";
+
+  if(get_wait_time() == 0 || workout_timer_elapsed_seconds() > get_wait_time()){
+    int set = get_current_set();
+    snprintf(set_buffer, sizeof(set_buffer), "%i of 5", set);
+  } else {
+    int seconds = get_wait_time();
+    snprintf(set_buffer, sizeof(set_buffer), "Wait %i seconds", seconds);
+  }
+
   text_layer_set_text(current_set_text, set_buffer);
 }
 
@@ -199,7 +212,9 @@ static void timer_bar_draw_proc(Layer *layer, GContext *ctx){
   // the global ones. i.e. 0, 0 here equates to 15, 130 on the whole pebble.
   draw_ticks_timer_bar(layer, ctx);
   
-  int xPos = (int)(4.0 / 3.0 * ((float) workout_timer_elapsed_seconds()));
+  // Drawing function is simple: xPos always equals the number of pixels per second
+  // multiplied by the number of elapsed seconds.
+  int xPos = (int)((120.0 / (get_wait_time() * 1.0)) *((float) workout_timer_elapsed_seconds()));
 
   const GPoint left_pt = GPoint(0, 5);
   GPoint right_pt = GPoint(xPos, 5);
@@ -213,8 +228,11 @@ static void timer_bar_draw_proc(Layer *layer, GContext *ctx){
 }
 
 static void timer_callback(int seconds){
-  if(workout_timer_is_running())
+  if(workout_timer_is_running()){
+    APP_LOG(APP_LOG_LEVEL_INFO, "%i seconds", seconds);
+    
     layer_mark_dirty(timer_bar);
+  }
 }
 
 static void update_reps(){
