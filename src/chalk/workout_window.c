@@ -92,11 +92,12 @@ void workout_window_load(void) {
   //layer_add_child(window_get_root_layer(workout_window), (Layer *)current_set_text);
   
   // exercise_text
-  exercise_text = text_layer_create(GRect(0, 0, 144, 32));
+  exercise_text = text_layer_create(GRect(20, 10, 144, 32));
   text_layer_set_text(exercise_text, "Squats");
   text_layer_set_text_alignment(exercise_text, GTextAlignmentCenter);
   text_layer_set_font(exercise_text, s_res_gothic_28_bold);
-  //layer_add_child(window_get_root_layer(workout_window), (Layer *)exercise_text);
+  text_layer_set_background_color(exercise_text, GColorClear);
+  layer_add_child(window_get_root_layer(workout_window), (Layer *)exercise_text);
   
   // current_rep_total
   current_rep_total = bitmap_layer_create(layer_get_bounds(window_get_root_layer(workout_window)));
