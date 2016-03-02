@@ -6,7 +6,7 @@ static Window *workout_window; // Declared in the header; allocated here.
 
 static GFont s_res_gothic_14;
 static GFont s_res_gothic_18;
-static GFont s_res_gothic_28_bold;
+static GFont s_res_gothic_24_bold;
 static Layer *timer_bar; // Where we'll be drawing the timer
 static TextLayer *weight_text; // The current weight's text
 static TextLayer *current_set_text; // The current set's text
@@ -49,6 +49,8 @@ void workout_window_init(){
       .unload = workout_window_unload
   });
 
+  window_set_background_color(workout_window, GColorWhite);
+
   window_set_click_config_provider(workout_window, (ClickConfigProvider) workout_window_click_config_provider);
 
   window_stack_push(workout_window, true);
@@ -62,7 +64,7 @@ void workout_window_deinit(){
 void workout_window_load(void) {
   s_res_gothic_14 = fonts_get_system_font(FONT_KEY_GOTHIC_14);
   s_res_gothic_18 = fonts_get_system_font(FONT_KEY_GOTHIC_18);
-  s_res_gothic_28_bold = fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD);
+  s_res_gothic_24_bold = fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD);
 
   // bitmaps
   zero_bitmap = gbitmap_create_with_resource(RESOURCE_ID_ZERO);
@@ -78,24 +80,26 @@ void workout_window_load(void) {
   layer_add_child(window_get_root_layer(workout_window), (Layer *)timer_bar);
   
   // weight_text
-  weight_text = text_layer_create(GRect(24, 29, 100, 16));
+  weight_text = text_layer_create(GRect(64, 35, 64, 16));
   text_layer_set_text(weight_text, "999 lbs");
   text_layer_set_text_alignment(weight_text, GTextAlignmentCenter);
   text_layer_set_font(weight_text, s_res_gothic_14);
-  //layer_add_child(window_get_root_layer(workout_window), (Layer *)weight_text);
+  text_layer_set_background_color(weight_text, GColorClear);
+  layer_add_child(window_get_root_layer(workout_window), (Layer *)weight_text);
   
   // current_set_text
   current_set_text = text_layer_create(GRect(0, 144, 144, 24));
   text_layer_set_text(current_set_text, "1 of 5");
   text_layer_set_text_alignment(current_set_text, GTextAlignmentCenter);
+  text_layer_set_background_color(current_set_text, GColorClear);
   text_layer_set_font(current_set_text, s_res_gothic_18);
   //layer_add_child(window_get_root_layer(workout_window), (Layer *)current_set_text);
   
   // exercise_text
-  exercise_text = text_layer_create(GRect(20, 10, 144, 32));
+  exercise_text = text_layer_create(GRect(20, 10, 144, 25));
   text_layer_set_text(exercise_text, "Squats");
   text_layer_set_text_alignment(exercise_text, GTextAlignmentCenter);
-  text_layer_set_font(exercise_text, s_res_gothic_28_bold);
+  text_layer_set_font(exercise_text, s_res_gothic_24_bold);
   text_layer_set_background_color(exercise_text, GColorClear);
   layer_add_child(window_get_root_layer(workout_window), (Layer *)exercise_text);
   
