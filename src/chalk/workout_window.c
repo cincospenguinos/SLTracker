@@ -73,7 +73,7 @@ void workout_window_load(void) {
   five_bitmap = gbitmap_create_with_resource(RESOURCE_ID_FIVE);
 
   // timer_bar
-  timer_bar = layer_create(GRect(12, 130, 120, 10));
+  timer_bar = layer_create(layer_get_bounds(window_get_root_layer(workout_window)));
   layer_set_update_proc(timer_bar, timer_bar_draw_proc);
   layer_add_child(window_get_root_layer(workout_window), (Layer *)timer_bar);
   
@@ -82,24 +82,24 @@ void workout_window_load(void) {
   text_layer_set_text(weight_text, "999 lbs");
   text_layer_set_text_alignment(weight_text, GTextAlignmentCenter);
   text_layer_set_font(weight_text, s_res_gothic_14);
-  layer_add_child(window_get_root_layer(workout_window), (Layer *)weight_text);
+  //layer_add_child(window_get_root_layer(workout_window), (Layer *)weight_text);
   
   // current_set_text
   current_set_text = text_layer_create(GRect(0, 144, 144, 24));
   text_layer_set_text(current_set_text, "1 of 5");
   text_layer_set_text_alignment(current_set_text, GTextAlignmentCenter);
   text_layer_set_font(current_set_text, s_res_gothic_18);
-  layer_add_child(window_get_root_layer(workout_window), (Layer *)current_set_text);
+  //layer_add_child(window_get_root_layer(workout_window), (Layer *)current_set_text);
   
   // exercise_text
   exercise_text = text_layer_create(GRect(0, 0, 144, 32));
   text_layer_set_text(exercise_text, "Squats");
   text_layer_set_text_alignment(exercise_text, GTextAlignmentCenter);
   text_layer_set_font(exercise_text, s_res_gothic_28_bold);
-  layer_add_child(window_get_root_layer(workout_window), (Layer *)exercise_text);
+  //layer_add_child(window_get_root_layer(workout_window), (Layer *)exercise_text);
   
   // current_rep_total
-  current_rep_total = bitmap_layer_create(GRect(34, 48, 76, 76));
+  current_rep_total = bitmap_layer_create(layer_get_bounds(window_get_root_layer(workout_window)));
   bitmap_layer_set_bitmap(current_rep_total, five_bitmap);
   layer_add_child(window_get_root_layer(workout_window), (Layer *)current_rep_total);
 
@@ -198,36 +198,12 @@ static void update_set_text(){
   text_layer_set_text(current_set_text, set_buffer);
 }
 
-// Helper method for draw_proc of timer_bar
-static void draw_ticks_timer_bar(Layer *layer, GContext *ctx){
-  const GPoint left_pt1 = GPoint(0, 0);
-  const GPoint left_pt2 = GPoint(0, 10);
-  const GPoint right_pt1 = GPoint(119, 0);
-  const GPoint right_pt2 = GPoint(119, 10);
-
-  graphics_context_set_stroke_color(ctx, GColorBlack);
-  graphics_draw_line(ctx, left_pt1, left_pt2);
-  graphics_draw_line(ctx, right_pt1, right_pt2);
-}
-
 static void timer_bar_draw_proc(Layer *layer, GContext *ctx){
-  // Note that these points have a RELATIVE set of axes. They do NOT use the
-  // the global ones. i.e. 0, 0 here equates to 15, 130 on the whole pebble.
-  draw_ticks_timer_bar(layer, ctx);
-  
-  // Drawing function is simple: xPos always equals the number of pixels per second
-  // multiplied by the number of elapsed seconds.
-  int xPos = (int)((120.0 / (get_wait_time() * 1.0)) *((float) workout_timer_elapsed_seconds()));
+  GRect timer_bar_rect = layer_get_bounds(window_get_root_layer(workout_window));
+  int degs = (int)((360.0 / (get_wait_time() * 1.0)) * ((float) workout_timer_elapsed_seconds()));
 
-  const GPoint left_pt = GPoint(0, 5);
-  GPoint right_pt = GPoint(xPos, 5);
-
-#ifdef PBL_COLOR
-  graphics_context_set_stroke_width(ctx, 3);
-  graphics_context_set_antialiased(ctx, true);
-#endif
-
-  graphics_draw_line(ctx, left_pt, right_pt);
+  graphics_context_set_fill_color(ctx, GColorRed);
+  graphics_fill_radial(ctx, timer_bar_rect, GOvalScaleModeFitCircle, 10, DEG_TO_TRIGANGLE(0), DEG_TO_TRIGANGLE(degs));
 }
 
 static void timer_callback(int seconds){
