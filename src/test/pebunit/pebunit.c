@@ -19,18 +19,24 @@ bool expect_true(bool value, char *description){
   if(!(assert(value))){
     APP_LOG(APP_LOG_LEVEL_ERROR, "ASSERTION FAILED: %s", description);
     APP_LOG(APP_LOG_LEVEL_ERROR, "Expected <true> but received <false>");
-  } else
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "Assertion passed: %s", description);
+  } 
+
+  // I've decided not to print anything when an assertion passes.
+  //else
+  //APP_LOG(APP_LOG_LEVEL_DEBUG, "Assertion passed: %s", description);
 
   return value;
 }
 
 bool expect_equal(int expected, int actual, char *description){
   if(!(assert(expected == actual))){
-    APP_LOG(APP_LOG_LEVEL_ERROR, "ASSERTION FAILED: %s", description);
+    APP_LOG(APP_LOG_LEVEL_ERROR, "EXPECT FAILED: %s", description);
     APP_LOG(APP_LOG_LEVEL_ERROR, "Expected <%d> but received <%d>", expected, actual);
-  } else
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "Assertion passed: %s", description);
+  } 
+
+  // Let's not pass anything if an expectation passes.
+  //else
+  //APP_LOG(APP_LOG_LEVEL_DEBUG, "Assertion passed: %s", description);
 
   return expected == actual;
 }

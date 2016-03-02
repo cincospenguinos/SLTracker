@@ -28,7 +28,7 @@ def build(ctx):
     for f in filelist:
         os.remove("src/headers/" + f)
     
-    print 'RUNNING BUILD wscript'
+    print 'Building...'
     ctx.load('pebble_sdk')
 
     build_worker = os.path.exists('worker_src')

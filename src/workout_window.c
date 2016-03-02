@@ -149,6 +149,9 @@ void go_to_next_set(ClickRecognizerRef recognizer, void *context){
     update_set_text();
   }
 
+  // We need to always update the reps
+  update_reps();
+
   // Always, always, start the workout timer again
   workout_timer_start(timer_callback);
 }
@@ -182,7 +185,7 @@ static void update_exercise_text(){
 }
 
 static void update_set_text(){
-  static char set_buffer[16] = "Wait    seconds";
+  static char set_buffer[17] = "Wait     seconds";
 
   if(get_wait_time() == 0 || workout_timer_elapsed_seconds() > get_wait_time()){
     int set = get_current_set();

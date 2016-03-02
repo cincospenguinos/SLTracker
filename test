@@ -5,8 +5,21 @@
 mv wscript wscript-build
 mv wscript-test wscript
 pebble build
+
+if [ "$1" == "-h" ]; then
+    echo '-h --- Shows this menu'
+    echo '-l --- Pipes info to log file'
+elif [ "$1" == "-l" ]; then
+    echo 'SL App Test' > `date +%Y-%m-%d`.txt
+    echo `date +%Y-%m-%d` >> test_log.txt
+    pebble install --emulator basalt --logs >> test_log.txt &
+else
+    echo 'SL App Test'
+    echo `date +%Y-%m-%d`
+    pebble install --emulator basalt --logs &
+fi
+
 echo 'SL App test' > test_log.txt
 echo `date +%Y-%m-%d` >> test_log.txt
-pebble install --emulator basalt --logs >> test_log.txt &
 mv wscript wscript-test
 mv wscript-build wscript
