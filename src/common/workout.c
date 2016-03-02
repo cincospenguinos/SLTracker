@@ -1,5 +1,5 @@
 #include <pebble.h>
-#include "headers/workout.h"
+#include "../headers/workout.h"
 
 #define UNIT_OF_MEASUREMENT 21213
 #define SQUAT_DELOAD_KEY 21214

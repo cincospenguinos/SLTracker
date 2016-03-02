@@ -1,4 +1,4 @@
-#include "headers/workout_timer.h"
+#include "../headers/workout_timer.h"
 
 static AppTimer *timer = NULL;
 static int seconds;

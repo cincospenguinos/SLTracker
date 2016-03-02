@@ -1,6 +1,6 @@
 #include <pebble.h>
-#include "headers/workout_window.h"
-#include "headers/workout.h"
+#include "../headers/workout_window.h"
+#include "../headers/workout.h"
 
 void init(){
   initialize_persistent_data();
