@@ -220,23 +220,33 @@ static void draw_ticks_timer_bar(Layer *layer, GContext *ctx){
   graphics_draw_line(ctx, right_pt1, right_pt2);
 }
 
-static void timer_bar_draw_proc(Layer *layer, GContext *ctx){
-  // Note that these points have a RELATIVE set of axes. They do NOT use the
-  // the global ones. i.e. 0, 0 here equates to 15, 130 on the whole pebble.
+static void timer_bar_draw_proc(Layer *layer, GContext *ctx) {
   draw_ticks_timer_bar(layer, ctx);
-  
-  // Drawing function is simple: xPos always equals the number of pixels per second
-  // multiplied by the number of elapsed seconds.
-  int xPos = (int)((120.0 / (get_wait_time() * 1.0)) *((float) workout_timer_elapsed_seconds()));
 
+  float wait_time = (float)get_wait_time();
+  float elapsed = (float)workout_timer_elapsed_seconds();
   const GPoint left_pt = GPoint(0, 5);
-  GPoint right_pt = GPoint(xPos, 5);
+  GPoint right_pt;
 
-#ifdef PBL_COLOR
-  graphics_context_set_stroke_width(ctx, 3);
-  graphics_context_set_antialiased(ctx, true);
-#endif
+  if(wait_time == 90.0 && elapsed > 180.0)
+    return;
 
+  int rightX;
+  if(wait_time == 90.0 && elapsed > 90.0) {
+    rightX = (int)(120.0 / wait_time * (elapsed - 90.0));
+
+    APP_LOG(APP_LOG_LEVEL_INFO, "rightX: %i", rightX);
+
+    graphics_context_set_stroke_color(ctx, GColorWhite);
+    graphics_context_set_fill_color(ctx, GColorWhite);
+  } else {
+    rightX = (int)(120.0 / wait_time * elapsed);
+
+    graphics_context_set_stroke_color(ctx, GColorBlack);
+    graphics_context_set_fill_color(ctx, GColorBlack);
+  }
+
+  right_pt = GPoint(rightX, 5);
   graphics_draw_line(ctx, left_pt, right_pt);
 }
 

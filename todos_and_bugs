@@ -1,8 +1,7 @@
 TODO:
-* Make the text flip between "Wait X seconds" and "Set X of Y"
-* Implement going back to a set during a workout
 * Chalk stuff still needs to be centered properly. Like do the math. ---> Pebble Round
 * Make the timer bar move backward if ninety seconds have elapsed
 
 BUGS:
 * Rapidly moving through sets causes weird timer issues. ---> Check the timer library that you made
+* Drawing on top off the timer bar has weird behavior in timer_bar_draw_proc
