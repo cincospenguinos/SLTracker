@@ -178,6 +178,7 @@ void go_to_previous_set(ClickRecognizerRef recognizer, void *context){
 
   // Always, always, cancel the workout_timer when moving backwards
   workout_timer_cancel();
+  update_reps();
 }
 
 static void update_exercise_text(){
@@ -194,7 +195,11 @@ static void update_set_text(bool show_sets){
 
   if(show_sets){
     int set = get_current_set();
-    snprintf(set_buffer, sizeof(set_buffer), "%i of 5", set);
+
+    if(!is_day_type_A() && get_current_exercise() == 3)
+      snprintf(set_buffer, sizeof(set_buffer), "%i of 1", set);
+    else
+      snprintf(set_buffer, sizeof(set_buffer), "%i of 5", set);
   } else {
     int seconds = get_wait_time();
     snprintf(set_buffer, sizeof(set_buffer), "Wait %i seconds", seconds);
