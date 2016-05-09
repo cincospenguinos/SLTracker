@@ -31,8 +31,11 @@ void create_new_workout();
 /* Returns true if today is an A day */
 bool is_day_type_A();
 
-/* Returns the name of the exercise requested of the current workout*/
+/* Returns the name of the exercise requested of the current workout */
 const char * get_current_exercise_name();
+
+/* Returns which exercise is currently being worked on */
+int get_current_exercise();
 
 /* Returns the weight of the current exercise */
 int get_current_exercise_weight();

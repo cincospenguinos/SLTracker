@@ -69,6 +69,10 @@ const char * get_current_exercise_name(){
   }
 }
 
+int get_current_exercise(){
+  return current_exercise + 1;
+}
+
 bool is_day_type_A(){
   return current_workout.day_type;
 }
@@ -113,6 +117,9 @@ int next_set(){
     wait_time = 0;
 
     return 6; // We have moved on to the next exercise
+  } else if (!is_day_type_A() && current_set == 1 && current_exercise == 2) { // Deadlift logic
+    current_exercise = 3;
+    return 7;
   }
 
   return get_current_set();
@@ -155,7 +162,7 @@ int add_rep(){
     reps = current_workout.ex_sets3[current_set];
     break;
   default:
-    APP_LOG(APP_LOG_LEVEL_ERROR, "This code should never run. --> add_rep");
+    APP_LOG(APP_LOG_LEVEL_ERROR, "This code should never run. --> add_rep()");
   }
 
   return reps;

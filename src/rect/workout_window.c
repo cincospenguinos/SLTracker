@@ -190,8 +190,6 @@ static void update_exercise_text(){
   static char weight_buffer[8] = "    lbs";
   snprintf(weight_buffer, sizeof(weight_buffer), "%i lbs", weight);
   text_layer_set_text(weight_text, weight_buffer);
-
-  APP_LOG(APP_LOG_LEVEL_INFO, "Current rep count: %i", get_current_rep_count());
 }
 
 static void update_set_text(bool show_sets){
@@ -199,7 +197,12 @@ static void update_set_text(bool show_sets){
 
   if(show_sets){
     int set = get_current_set();
-    snprintf(set_buffer, sizeof(set_buffer), "%i of 5", set);
+
+    // Deadlift logic
+    if(!is_day_type_A() && get_current_exercise() == 3)
+      snprintf(set_buffer, sizeof(set_buffer), "%i of 1", set);
+    else
+      snprintf(set_buffer, sizeof(set_buffer), "%i of 5", set);
   } else {
     int seconds = get_wait_time();
     snprintf(set_buffer, sizeof(set_buffer), "Wait %i seconds", seconds);
