@@ -153,6 +153,7 @@ void go_to_next_set(ClickRecognizerRef recognizer, void *context){
   update_reps();
 
   // Always, always, start the workout timer again
+  workout_timer_cancel();
   workout_timer_start(timer_callback);
 }
 
