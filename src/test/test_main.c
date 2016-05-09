@@ -8,7 +8,7 @@
  */
 #include <pebble.h>
 #include "pebunit/pebunit.h"
-#include "../workout.c"
+#include "../common/workout.c"
 
 void startup(){
   initialize_persistent_data();
@@ -125,6 +125,29 @@ void test_wait_times(){
   delete_all_data();
 }
 
+void test_rep_count_under_five(){
+  initialize_persistent_data();
+  create_new_workout();
+
+  for(int i = 0; i < 5; i++){
+    next_set();
+  }
+
+  for(int i = 5; i >= 0; i--){
+    int reps = get_current_rep_count();
+    expect_equal(i, reps, "Rep counts should move downwards whenever subract_rep is called");
+
+    subtract_rep();
+  }
+
+  for(int i = 0; i <= 5; i++){
+    int reps = get_current_rep_count();
+    expect_equal(i, reps, "Rep counts should move up whenever add_rep is called");
+
+    add_rep();
+  }
+}
+
 void test_deadlift_logic(){
   // TODO: This
 }
@@ -143,6 +166,7 @@ void run_all_tests(){
   run_test(test_wait_times);
   run_test(test_deadlift_logic);
   run_test(test_correct_weight_kilos);
+  run_test(test_rep_count_under_five);
   shutdown();
   report();
 }

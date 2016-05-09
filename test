@@ -12,7 +12,7 @@ if [ "$1" == "-h" ]; then
 elif [ "$1" == "-l" ]; then
     echo 'SL App Test' > `date +%Y-%m-%d`.txt
     echo `date +%Y-%m-%d` >> test_log.txt
-    pebble install --emulator basalt --logs >> test_log.txt &
+    pebble install --emulator basalt --logs >> test_log.txt
 else
     echo 'SL App Test'
     echo `date +%Y-%m-%d`

@@ -136,29 +136,34 @@ void subtract_one_current_reps(ClickRecognizerRef recognizer, void *context){
 void go_to_next_set(ClickRecognizerRef recognizer, void *context){
   int result = next_set();
 
+  APP_LOG(APP_LOG_LEVEL_INFO, "Current rep count: %i", get_current_rep_count());
+
   switch(result){
   case 6: // We need to update the exercise information
     update_exercise_text();
+    workout_timer_cancel();
     update_set_text(true);
+    window_set_click_config_provider(workout_window, (ClickConfigProvider) workout_window_click_config_provider);
     break;
   case 7: // We need to save and quit
     store_workout();
+    workout_timer_cancel();
     window_stack_pop(true);
     break;
   default:
+    workout_timer_cancel();
+    workout_timer_start(timer_callback);
     update_set_text(false);
   }
 
   // We need to always update the reps
   update_reps();
-
-  // Always, always, start the workout timer again
-  workout_timer_cancel();
-  workout_timer_start(timer_callback);
 }
 
 void go_to_previous_set(ClickRecognizerRef recognizer, void *context){
   int result = previous_set();
+
+  APP_LOG(APP_LOG_LEVEL_INFO, "Current rep count: %i", get_current_rep_count());
 
   switch(result){
   case 0: // We need to update the exercise information
@@ -185,6 +190,8 @@ static void update_exercise_text(){
   static char weight_buffer[8] = "    lbs";
   snprintf(weight_buffer, sizeof(weight_buffer), "%i lbs", weight);
   text_layer_set_text(weight_text, weight_buffer);
+
+  APP_LOG(APP_LOG_LEVEL_INFO, "Current rep count: %i", get_current_rep_count());
 }
 
 static void update_set_text(bool show_sets){
@@ -250,6 +257,7 @@ static void timer_callback(int seconds){
 
 static void update_reps(){
   GBitmap *bitmap;
+  APP_LOG(APP_LOG_LEVEL_INFO, "Current rep count: %i", get_current_rep_count());
   switch(get_current_rep_count()){
   case 0:
     bitmap = zero_bitmap;

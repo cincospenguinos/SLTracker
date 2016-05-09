@@ -136,21 +136,21 @@ int add_rep(){
   int reps = -1;
 
   switch(current_exercise){
-  case 0:
+  case 0: // Squats
     if(current_workout.ex_sets1[current_set] < 5)
-      current_workout.ex_sets1[current_set]++;
+      current_workout.ex_sets1[current_set] += 1;
     
     reps = current_workout.ex_sets1[current_set];
     break;
-  case 1:
+  case 1: // Bench or Overhead
     if(current_workout.ex_sets2[current_set] < 5)
-      current_workout.ex_sets2[current_set]++;
+      current_workout.ex_sets2[current_set] += 1;
 
     reps = current_workout.ex_sets2[current_set];
     break;
-  case 2:
+  case 2: // Bent or Deadlift
     if(current_workout.ex_sets3[current_set] < 5)
-      current_workout.ex_sets3[current_set]++;
+      current_workout.ex_sets3[current_set] += 1;
 
     reps = current_workout.ex_sets3[current_set];
     break;
@@ -167,19 +167,19 @@ int subtract_rep(){
   switch(current_exercise){
   case 0:
     if(current_workout.ex_sets1[current_set] > 0)
-      current_workout.ex_sets1[current_set]--;
+      current_workout.ex_sets1[current_set] -= 1;
     
     reps = current_workout.ex_sets1[current_set];
     break;
   case 1:
     if(current_workout.ex_sets2[current_set] > 0)
-      current_workout.ex_sets2[current_set]++;
+      current_workout.ex_sets2[current_set] -= 1;
 
     reps = current_workout.ex_sets2[current_set];
     break;
   case 2:
     if(current_workout.ex_sets3[current_set] > 0)
-      current_workout.ex_sets3[current_set]++;
+      current_workout.ex_sets3[current_set] -= 1;
 
     reps = current_workout.ex_sets3[current_set];
     break;

@@ -7,7 +7,7 @@
  */
 
 /* Workout struct. */
-typedef struct Workout{
+typedef struct Workout {
   uint16_t weight[3]; // Weight for each exercise
 
   uint8_t ex_sets1[5]; // exercise sets - number between 0 and 5 for each index

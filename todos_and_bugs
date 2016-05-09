@@ -6,4 +6,3 @@ TODO:
 
 BUGS:
 * Rapidly moving through sets causes weird timer issues. ---> Check the timer library that you made
-* Changing exercises causes rep count to disappear
