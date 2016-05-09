@@ -26,7 +26,7 @@ static GBitmap *five_bitmap;
  */
 
 static void update_exercise_text();
-static void update_set_text();
+static void update_set_text(bool);
 static void update_reps();
 static void timer_bar_draw_proc(Layer *layer, GContext *ctx);
 static void timer_callback(int seconds);
@@ -80,7 +80,7 @@ void workout_window_load(void) {
   layer_add_child(window_get_root_layer(workout_window), (Layer *)timer_bar);
   
   // weight_text
-  weight_text = text_layer_create(GRect(64, 35, 64, 16));
+  weight_text = text_layer_create(GRect(60, 35, 64, 16));
   text_layer_set_text(weight_text, "999 lbs");
   text_layer_set_text_alignment(weight_text, GTextAlignmentCenter);
   text_layer_set_font(weight_text, s_res_gothic_14);
@@ -88,15 +88,15 @@ void workout_window_load(void) {
   layer_add_child(window_get_root_layer(workout_window), (Layer *)weight_text);
   
   // current_set_text
-  current_set_text = text_layer_create(GRect(0, 144, 144, 24));
+  current_set_text = text_layer_create(GRect(20, 134, 144, 24));
   text_layer_set_text(current_set_text, "1 of 5");
   text_layer_set_text_alignment(current_set_text, GTextAlignmentCenter);
   text_layer_set_background_color(current_set_text, GColorClear);
-  text_layer_set_font(current_set_text, s_res_gothic_18);
-  //layer_add_child(window_get_root_layer(workout_window), (Layer *)current_set_text);
+  text_layer_set_font(current_set_text, fonts_get_system_font(FONT_KEY_GOTHIC_24));
+  layer_add_child(window_get_root_layer(workout_window), (Layer *)current_set_text);
   
   // exercise_text
-  exercise_text = text_layer_create(GRect(20, 10, 144, 25));
+  exercise_text = text_layer_create(GRect(18, 10, 144, 25));
   text_layer_set_text(exercise_text, "Squats");
   text_layer_set_text_alignment(exercise_text, GTextAlignmentCenter);
   text_layer_set_font(exercise_text, s_res_gothic_24_bold);
@@ -108,7 +108,7 @@ void workout_window_load(void) {
   bitmap_layer_set_bitmap(current_rep_total, five_bitmap);
   layer_add_child(window_get_root_layer(workout_window), (Layer *)current_rep_total);
 
-  update_set_text();
+  update_set_text(true);
   update_exercise_text();
 }
 
@@ -141,25 +141,24 @@ void subtract_one_current_reps(ClickRecognizerRef recognizer, void *context){
 void go_to_next_set(ClickRecognizerRef recognizer, void *context){
   int result = next_set();
 
+  workout_timer_cancel();
+
   switch(result){
   case 6: // We need to update the exercise information
     update_exercise_text();
-    update_set_text();
+    update_set_text(true);
     break;
   case 7: // We need to save and quit
     store_workout();
     window_stack_pop(true);
     break;
   default:
-    update_set_text();
+    update_set_text(false);
+    workout_timer_start(timer_callback);
   }
 
   // We need to always update the reps
   update_reps();
-
-  // Always, always, start the workout timer again
-  workout_timer_cancel();
-  workout_timer_start(timer_callback);
 }
 
 void go_to_previous_set(ClickRecognizerRef recognizer, void *context){
@@ -168,13 +167,13 @@ void go_to_previous_set(ClickRecognizerRef recognizer, void *context){
   switch(result){
   case 0: // We need to update the exercise information
     update_exercise_text();
-    update_set_text();
+    update_set_text(true);
     break;
   case -1:// We need to quit the application
     window_stack_pop(true);
     break;
   default:
-    update_set_text();
+    update_set_text(true);
   }
 
   // Always, always, cancel the workout_timer when moving backwards
@@ -190,10 +189,10 @@ static void update_exercise_text(){
   text_layer_set_text(weight_text, weight_buffer);
 }
 
-static void update_set_text(){
+static void update_set_text(bool show_sets){
   static char set_buffer[17] = "Wait     seconds";
 
-  if(get_wait_time() == 0 || workout_timer_elapsed_seconds() > get_wait_time()){
+  if(show_sets){
     int set = get_current_set();
     snprintf(set_buffer, sizeof(set_buffer), "%i of 5", set);
   } else {
@@ -217,7 +216,10 @@ static void timer_callback(int seconds){
     
     
     // For now, always update everything
-    update_set_text();
+    if(seconds < 5)
+      update_set_text(false);
+    else
+      update_set_text(true);
     layer_mark_dirty(timer_bar);
   }
 }

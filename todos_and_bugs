@@ -1,6 +1,7 @@
 TODO:
-* Chalk stuff still needs to be centered properly. Like do the math. ---> Pebble Round
+* Chalk stuff still needs to be centered properly. Like do the math.
 * Make the timer bar move backward if ninety seconds have elapsed
+* Chalk stuff needs to be moved around a bit more. Play a little bit with the drawing and stuff
 
 BUGS:
 * Rapidly moving through sets causes weird timer issues. ---> Check the timer library that you made
