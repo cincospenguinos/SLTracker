@@ -26,7 +26,7 @@ static GBitmap *five_bitmap;
  */
 
 static void update_exercise_text();
-static void update_set_text();
+static void update_set_text(bool show_sets);
 static void update_reps();
 static void timer_bar_draw_proc(Layer *layer, GContext *ctx);
 static void timer_callback(int seconds);
@@ -103,7 +103,7 @@ void workout_window_load(void) {
   bitmap_layer_set_bitmap(current_rep_total, five_bitmap);
   layer_add_child(window_get_root_layer(workout_window), (Layer *)current_rep_total);
 
-  update_set_text();
+  update_set_text(true);
   update_exercise_text();
 }
 
@@ -139,14 +139,14 @@ void go_to_next_set(ClickRecognizerRef recognizer, void *context){
   switch(result){
   case 6: // We need to update the exercise information
     update_exercise_text();
-    update_set_text();
+    update_set_text(true);
     break;
   case 7: // We need to save and quit
     store_workout();
     window_stack_pop(true);
     break;
   default:
-    update_set_text();
+    update_set_text(false);
   }
 
   // We need to always update the reps
@@ -163,13 +163,15 @@ void go_to_previous_set(ClickRecognizerRef recognizer, void *context){
   switch(result){
   case 0: // We need to update the exercise information
     update_exercise_text();
-    update_set_text();
+    update_set_text(true);
+    update_reps();
     break;
   case -1:// We need to quit the application
     window_stack_pop(true);
     break;
   default:
-    update_set_text();
+    update_set_text(true);
+    update_reps();
   }
 
   // Always, always, cancel the workout_timer when moving backwards
@@ -185,10 +187,10 @@ static void update_exercise_text(){
   text_layer_set_text(weight_text, weight_buffer);
 }
 
-static void update_set_text(){
+static void update_set_text(bool show_sets){
   static char set_buffer[17] = "Wait     seconds";
 
-  if(get_wait_time() == 0 || workout_timer_elapsed_seconds() > get_wait_time()){
+  if(show_sets){
     int set = get_current_set();
     snprintf(set_buffer, sizeof(set_buffer), "%i of 5", set);
   } else {
@@ -235,8 +237,13 @@ static void timer_callback(int seconds){
   if(workout_timer_is_running()){
     
     
-    // For now, always update everything
-    update_set_text();
+    // Show the amount of time if less than five seconds have passed
+    if(seconds <= 5)
+      update_set_text(false);
+
+    // Otherwise, show what set we are currently working on.
+    else
+      update_set_text(true);
     layer_mark_dirty(timer_bar);
   }
 }
